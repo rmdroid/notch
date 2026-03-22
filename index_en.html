@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TermNotch &mdash; Your AI Terminal. Hidden in the Notch.</title>
+<meta name="description" content="TermNotch turns your MacBook notch into a drop-down AI terminal. One hotkey. Claude, Gemini, Codex &mdash; instantly there, instantly gone.">
+<meta name="keywords" content="TermNotch, MacBook Notch Terminal, Drop-Down Terminal, AI Terminal, Claude Code, Gemini CLI, Codex CLI, macOS Terminal, Hotkey Terminal, Swift Terminal">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Robert Meyer">
+<meta name="theme-color" content="#050505">
+<link rel="canonical" href="https://ki-notch.de/index_en.html">
+<link rel="alternate" hreflang="de" href="https://ki-notch.de/">
+<link rel="alternate" hreflang="en" href="https://ki-notch.de/index_en.html">
+<link rel="alternate" hreflang="x-default" href="https://ki-notch.de/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="TermNotch &mdash; Your AI Terminal. Hidden in the Notch.">
+<meta property="og:description" content="The MacBook notch becomes a drop-down terminal. One hotkey for Claude, Gemini, Codex &mdash; instantly there, instantly gone.">
+<meta property="og:url" content="https://ki-notch.de/index_en.html">
+<meta property="og:site_name" content="TermNotch">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TermNotch &mdash; Your AI Terminal. Hidden in the Notch.">
+<meta name="twitter:description" content="The MacBook notch becomes a drop-down terminal. One hotkey for Claude, Gemini, Codex.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "TermNotch",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS 15+",
+  "description": "TermNotch turns the MacBook notch into a drop-down AI terminal with global hotkey, multi-tab, 8 themes and local API.",
+  "url": "https://ki-notch.de/index_en.html",
+  "offers": {
+    "@type": "Offer",
+    "price": "9.99",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock"
+  },
+  "publisher": { "@type": "Person", "name": "Robert Meyer" },
+  "featureList": [
+    "Drop-down terminal from the MacBook notch",
+    "Global hotkey (Ctrl+I)",
+    "Multi-tab with dynamic titles",
+    "8 color themes",
+    "Quick Commands for AI CLI tools",
+    "Local API on port 7777",
+    "Native Swift, under 4 MB"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is TermNotch?", "acceptedAnswer": { "@type": "Answer", "text": "TermNotch is a native macOS app that turns the MacBook notch into a full-featured drop-down terminal." }},
+    { "@type": "Question", "name": "Which AI CLI tools are supported?", "acceptedAnswer": { "@type": "Answer", "text": "TermNotch works with all CLI tools: Claude Code, Gemini CLI, Codex CLI and any other command-line program." }},
+    { "@type": "Question", "name": "Is TermNotch a subscription?", "acceptedAnswer": { "@type": "Answer", "text": "No. TermNotch is a one-time purchase. All future updates are included." }}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--green:#33FF66;--green-dim:rgba(51,255,102,0.06);--green-glow:rgba(51,255,102,0.12);
+--cyan:#00FFFF;--amber:#FFB000;
+--bg:#030303;--surface:#0a0a0a;--surface2:#111;--border:rgba(255,255,255,0.06);
+--text:rgba(255,255,255,0.9);--text-dim:rgba(255,255,255,0.45);--text-muted:rgba(255,255,255,0.25);
+--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+--ease:cubic-bezier(0.16,1,0.3,1);
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text)}
+body{overflow-x:hidden;background:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+::selection{background:var(--green);color:#000}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes glow-pulse{0%,100%{opacity:0.3}50%{opacity:0.7}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.cursor{display:inline-block;width:9px;height:18px;background:var(--green);animation:blink 1s infinite;vertical-align:middle;margin-left:3px;border-radius:1px}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 0.9s var(--ease),transform 0.9s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;
+background:rgba(3,3,3,0.8);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--mono);font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;letter-spacing:-0.3px}
+.logo img{width:26px;height:26px;border-radius:6px}
+.logo span{color:var(--text-dim);font-weight:400}
+.nav-right{display:flex;align-items:center;gap:24px}
+nav a{color:var(--text-dim);text-decoration:none;font-size:13px;font-weight:400;transition:color 0.2s}
+nav a:hover{color:#fff}
+.lang-switch{display:inline-flex;gap:1px;padding:2px;border-radius:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border)}
+.lang-switch a,.lang-switch span{padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;color:var(--text-dim);text-decoration:none;font-family:var(--mono)}
+.lang-switch .active{background:var(--green);color:#000}
+.nav-cta{background:#fff!important;color:#000!important;padding:8px 20px;border-radius:6px;font-weight:600;font-size:12px!important;transition:all 0.2s!important}
+.nav-cta:hover{background:var(--green)!important;transform:scale(1.03)}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:140px 24px 100px;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;
+background:radial-gradient(circle,rgba(51,255,102,0.06) 0%,transparent 60%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:100px;border:1px solid var(--border);
+background:rgba(255,255,255,0.03);font-size:12px;color:var(--text-dim);margin-bottom:48px;animation:fadeUp 0.8s var(--ease) both;font-family:var(--mono)}
+.hero-tag .pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:glow-pulse 2.5s infinite}
+.hero h1{font-size:clamp(40px,8vw,88px);font-weight:800;text-align:center;line-height:1;letter-spacing:-3px;
+animation:fadeUp 0.8s var(--ease) 0.15s both;max-width:900px}
+.hero h1 em{font-style:normal;color:var(--green);position:relative;display:inline-block}
+.hero h1 em::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:4px;background:var(--green);border-radius:2px;opacity:0.25}
+.hero-sub{font-size:clamp(16px,2.2vw,20px);color:var(--text-dim);text-align:center;max-width:500px;margin-top:32px;line-height:1.6;font-weight:300;
+animation:fadeUp 0.8s var(--ease) 0.3s both}
+.hero-actions{display:flex;gap:12px;margin-top:52px;animation:fadeUp 0.8s var(--ease) 0.45s both;align-items:center}
+.btn-main{background:var(--green);color:#000;padding:16px 40px;border-radius:12px;text-decoration:none;font-weight:700;font-size:15px;
+transition:all 0.25s;border:none;cursor:pointer;font-family:var(--sans);letter-spacing:-0.2px}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(51,255,102,0.3)}
+.btn-ghost{color:var(--text-dim);text-decoration:none;font-size:14px;padding:16px 20px;transition:color 0.2s;font-weight:400}
+.btn-ghost:hover{color:#fff}
+.hero-meta{font-size:12px;color:var(--text-muted);margin-top:24px;animation:fadeUp 0.8s var(--ease) 0.6s both;font-family:var(--mono)}
+
+.video-showcase{margin-top:80px;animation:fadeUp 1s var(--ease) 0.7s both;width:100%;max-width:700px;position:relative}
+.video-showcase::before{content:'';position:absolute;inset:-40px;background:radial-gradient(ellipse at center,rgba(51,255,102,0.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+.video-showcase video{width:100%;border-radius:16px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 40px 100px rgba(0,0,0,0.7);position:relative;z-index:1}
+
+section{position:relative;z-index:1;padding:140px 24px}
+.container{max-width:1080px;margin:0 auto}
+.section-eyebrow{font-size:12px;color:var(--green);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-weight:500;font-family:var(--mono)}
+.section-heading{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+.section-sub{font-size:16px;color:var(--text-dim);line-height:1.7;max-width:500px;font-weight:300}
+
+.usecases{background:linear-gradient(180deg,var(--bg) 0%,rgba(10,10,10,1) 50%,var(--bg) 100%)}
+.usecase-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:64px}
+.usecase-card{background:var(--surface);padding:48px 40px;position:relative;overflow:hidden;transition:all 0.4s var(--ease);cursor:default}
+.usecase-card:hover{background:var(--surface2)}
+.usecase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0;transition:opacity 0.4s}
+.usecase-card:hover::before{opacity:0.4}
+.usecase-scenario{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;font-family:var(--mono)}
+.usecase-card h3{font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:12px;line-height:1.3}
+.usecase-card p{font-size:13px;color:var(--text-dim);line-height:1.7;font-weight:300;margin-bottom:20px}
+.usecase-terminal{background:#000;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:11px;line-height:1.8}
+.uc-prompt{color:var(--green)}
+.uc-cmd{color:#fff}
+.uc-out{color:var(--text-dim)}
+.uc-check{color:var(--green)}
+
+.features-strip{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0}
+.features-strip-inner{display:flex;padding:0}
+.feature-item{flex:1;padding:48px 40px;border-right:1px solid var(--border);text-align:center;transition:background 0.3s}
+.feature-item:last-child{border-right:none}
+.feature-item:hover{background:rgba(255,255,255,0.02)}
+.feature-item .fi-icon{font-size:28px;margin-bottom:16px;display:block}
+.feature-item h4{font-size:14px;font-weight:600;margin-bottom:8px;letter-spacing:-0.2px}
+.feature-item p{font-size:12px;color:var(--text-dim);line-height:1.6;font-weight:300}
+
+.api-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.api-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:64px}
+.api-text h3{font-size:15px;font-weight:600;margin-bottom:8px}
+.api-text p{font-size:13px;color:var(--text-dim);line-height:1.7;font-weight:300;margin-bottom:28px}
+.api-examples{display:flex;flex-direction:column;gap:12px}
+.api-example{background:#000;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:20px;font-family:var(--mono);font-size:12px;
+position:relative;overflow:hidden;transition:border-color 0.3s}
+.api-example:hover{border-color:rgba(51,255,102,0.2)}
+.api-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:block}
+.api-code{color:var(--text);line-height:1.8}
+.api-code .key{color:var(--green)}
+.api-code .str{color:var(--amber)}
+.api-code .url{color:var(--cyan)}
+
+.demo-section{text-align:center}
+.demo-wrap{max-width:640px;margin:48px auto 0;background:#000;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+box-shadow:0 40px 100px rgba(0,0,0,0.5),0 0 80px rgba(51,255,102,0.03);position:relative}
+.demo-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,rgba(51,255,102,0.3),transparent)}
+.demo-bar{display:flex;align-items:center;padding:14px 18px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);gap:8px}
+.demo-dot{width:10px;height:10px;border-radius:50%}
+.demo-dot.r{background:#ff5f57}.demo-dot.y{background:#febc2e}.demo-dot.g{background:#28c840}
+.demo-bar-title{flex:1;text-align:center;font-size:12px;color:var(--text-muted);font-family:var(--mono)}
+.demo-body{padding:24px;font-family:var(--mono);font-size:12px;line-height:2;text-align:left;height:300px;overflow-y:auto;overflow-x:hidden}
+.demo-body::-webkit-scrollbar{width:4px}
+.demo-body::-webkit-scrollbar-thumb{background:rgba(51,255,102,0.12);border-radius:2px}
+.term-prompt{color:var(--green)}
+.term-cmd{color:#fff}
+
+.pricing{text-align:center}
+.price-box{max-width:440px;margin:56px auto 0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:56px 48px;position:relative;overflow:hidden}
+.price-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,transparent 10%,var(--green) 50%,transparent 90%)}
+.price-tag{font-size:11px;color:var(--green);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:var(--mono)}
+.price-amount{font-size:64px;font-weight:800;letter-spacing:-3px;margin:16px 0 4px}
+.price-amount span{font-size:24px;color:var(--text-dim);font-weight:300}
+.price-sub{font-size:13px;color:var(--text-dim);margin-bottom:36px;font-weight:300}
+.price-list{list-style:none;text-align:left;margin-bottom:40px}
+.price-list li{padding:12px 0;font-size:13px;color:var(--text);border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:12px;font-weight:300}
+.price-list li::before{content:'>';color:var(--green);font-weight:700;font-family:var(--mono)}
+.price-btn{width:100%;padding:18px;background:var(--green);color:#000;border:none;border-radius:12px;font-family:var(--sans);font-size:16px;font-weight:700;
+cursor:pointer;transition:all 0.25s;letter-spacing:-0.2px}
+.price-btn:hover{box-shadow:0 12px 48px rgba(51,255,102,0.3);transform:translateY(-2px)}
+
+.faq-list{display:grid;gap:2px;margin-top:56px;max-width:720px;margin-left:auto;margin-right:auto}
+.faq-item{background:var(--surface);border:1px solid rgba(255,255,255,0.03);overflow:hidden}
+.faq-item summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:pointer;
+font-size:15px;font-weight:500;padding:22px 28px;transition:background 0.2s}
+.faq-item summary:hover{background:rgba(255,255,255,0.02)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+flex:0 0 auto;background:var(--green-dim);color:var(--green);font-size:16px;font-family:var(--mono);font-weight:700;transition:all 0.2s}
+.faq-item[open] summary::after{content:'\2212';background:var(--green);color:#000}
+.faq-item[open] summary{border-bottom:1px solid rgba(255,255,255,0.03)}
+.faq-answer{padding:20px 28px 24px;color:var(--text-dim);font-size:14px;line-height:1.8;font-weight:300}
+
+.final-cta{text-align:center;padding:180px 24px}
+.final-cta h2{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-2.5px;line-height:1.05;margin-bottom:24px}
+.final-cta p{color:var(--text-dim);font-size:16px;margin-bottom:48px;font-weight:300;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+.final-prompt{display:inline-flex;align-items:center;gap:8px;font-size:18px;color:var(--green);margin-bottom:56px;font-family:var(--mono)}
+
+footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center}
+footer p{font-size:12px;color:var(--text-muted);font-weight:300}
+.footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;flex-wrap:wrap}
+footer a{color:var(--text-dim);text-decoration:none;font-size:12px;transition:color 0.2s}
+footer a:hover{color:var(--green)}
+footer button.flink{background:none;border:none;color:var(--text-dim);font-family:var(--sans);font-size:12px;cursor:pointer;transition:color 0.2s;padding:0}
+footer button.flink:hover{color:var(--green)}
+.footer-yt{display:inline-flex;align-items:center;gap:6px;color:var(--text-dim);text-decoration:none;font-size:12px;transition:color 0.2s}
+.footer-yt:hover{color:var(--green)}
+.footer-yt svg{width:16px;height:16px}
+
+.cookie-notice{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:70;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+padding:14px 20px;border-radius:14px;background:rgba(3,3,3,0.92);border:1px solid var(--border);
+box-shadow:0 24px 60px rgba(0,0,0,0.4);backdrop-filter:blur(20px)}
+.cookie-notice.is-hidden{display:none}
+.cookie-notice p{color:var(--text-dim);font-size:12px;line-height:1.6;margin:0}
+.cookie-ack{min-height:36px;padding:8px 18px;border-radius:8px;border:0;background:#fff;color:#000;font-weight:600;font-size:12px;
+font-family:var(--sans);cursor:pointer;flex:0 0 auto;transition:all 0.2s}
+.cookie-ack:hover{background:var(--green)}
+
+.legal-modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:1rem;
+background:rgba(0,0,0,0.75);backdrop-filter:blur(16px)}
+.legal-modal.open{display:flex}
+.legal-dialog{width:min(100%,900px);border-radius:16px;background:var(--surface2);color:var(--text);box-shadow:0 40px 100px rgba(0,0,0,0.6);overflow:hidden;
+border:1px solid var(--border)}
+.legal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border)}
+.legal-head h3{font-size:16px;font-weight:600;color:var(--green)}
+.legal-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.04);
+color:#fff;font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background 0.2s}
+.legal-close:hover{background:rgba(255,255,255,0.1)}
+.legal-frame{width:100%;min-height:min(70vh,720px);border:0;background:var(--surface)}
+
+.to-top{position:fixed;right:1.5rem;bottom:5rem;z-index:65;width:44px;height:44px;border:1px solid var(--border);border-radius:50%;
+background:rgba(3,3,3,0.9);color:var(--text-dim);font-size:16px;cursor:pointer;
+display:inline-flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);pointer-events:none;
+transition:all 0.3s var(--ease);backdrop-filter:blur(16px)}
+.to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+.to-top:hover{background:var(--green);color:#000;border-color:var(--green)}
+
+@media(max-width:900px){
+.usecase-grid{grid-template-columns:1fr}
+.api-layout{grid-template-columns:1fr;gap:48px}
+.features-strip-inner{flex-wrap:wrap}
+.feature-item{flex:1 1 50%;border-bottom:1px solid var(--border)}
+}
+@media(max-width:640px){
+nav{padding:0 20px;height:56px}
+.nav-right a:not(.nav-cta):not(.lang-switch):not(.lang-switch *){display:none}
+section{padding:100px 20px}
+.hero{padding:120px 20px 80px}
+.usecase-card{padding:32px 24px}
+.feature-item{flex:1 1 100%}
+.api-layout{gap:32px}
+.price-box{padding:40px 28px}
+.hero-actions{flex-direction:column;width:100%}
+.btn-main{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><img src="icon_nav.png" alt="TermNotch">Term<span>Notch</span></div>
+  <div class="nav-right">
+    <a href="#usecases">Use Cases</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <div class="lang-switch"><a href="index.html">DE</a><span class="active">EN</span></div>
+    <a href="#pricing" class="nav-cta">BUY &euro;9.99</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-tag"><span class="pulse"></span> Native Swift &middot; macOS 15+ &middot; Under 4 MB</div>
+  <h1>Ctrl+I.<br>Your terminal <em>appears</em>.</h1>
+  <p class="hero-sub">The MacBook notch becomes your AI terminal. Claude, Gemini, Codex &mdash; one hotkey away.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-main">Buy now &mdash; &euro;9.99</a>
+    <a href="#usecases" class="btn-ghost">&darr; Learn more</a>
+  </div>
+  <p class="hero-meta">Apple Signed &amp; Notarized &middot; One-time payment &middot; No subscription</p>
+
+  <div class="video-showcase">
+    <video autoplay muted loop playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<!-- ============ USE CASES ============ -->
+<section class="usecases reveal" id="usecases">
+  <div class="container">
+    <span class="section-eyebrow">Why TermNotch</span>
+    <div class="section-heading">Your terminal is always<br>one hotkey away.</div>
+    <p class="section-sub">No window hunting. No Cmd+Tab. Stay in your flow &mdash; the terminal comes to you.</p>
+
+    <div class="usecase-grid">
+
+      <div class="usecase-card reveal">
+        <div class="usecase-scenario">While you code</div>
+        <h3>Claude answers in the notch.</h3>
+        <p>You're working in your editor. Claude runs in the background. Ctrl+I &mdash; read the answer &mdash; Esc. No window switch, no context loss.</p>
+        <div class="usecase-terminal">
+          <span class="uc-prompt">claude &gt; </span><span class="uc-cmd">refactor the auth module</span><br>
+          <span class="uc-check">&check;</span> <span class="uc-out">3 files changed, all tests passing.</span><br>
+          <span class="uc-out">Ready to commit.</span>
+        </div>
+      </div>
+
+      <div class="usecase-card reveal">
+        <div class="usecase-scenario">Between two meetings</div>
+        <h3>Git status in 2 seconds.</h3>
+        <p>Notch open. git status. Notch closed. Faster than your dock appears. Perfect for a quick check in between.</p>
+        <div class="usecase-terminal">
+          <span class="uc-prompt">~ &gt; </span><span class="uc-cmd">git status</span><br>
+          <span class="uc-check">&#9679;</span> <span class="uc-out">main &middot; 2 commits ahead</span><br>
+          <span class="uc-out">M  src/auth.ts</span><br>
+          <span class="uc-out">A  src/utils/token.ts</span>
+        </div>
+      </div>
+
+      <div class="usecase-card reveal">
+        <div class="usecase-scenario">While browsing</div>
+        <h3>Instant SSH. One click.</h3>
+        <p>You're reading docs, need the server real quick. Hit a Quick Command &mdash; SSH session is up. No terminal hunting, no window positioning.</p>
+        <div class="usecase-terminal">
+          <span class="uc-prompt">~ &gt; </span><span class="uc-cmd">ssh deploy@prod-1</span><br>
+          <span class="uc-check">&check;</span> <span class="uc-out">Connected to prod-1 (eu-west-1)</span><br>
+          <span class="uc-prompt">deploy@prod-1 &gt; </span><span class="cursor" style="height:12px;width:7px"></span>
+        </div>
+      </div>
+
+      <div class="usecase-card reveal">
+        <div class="usecase-scenario">Automation</div>
+        <h3>Other apps control your notch.</h3>
+        <p>Shortcuts, Raycast, scripts &mdash; anything can control TermNotch via the Local API. Your terminal becomes a building block in your workflow.</p>
+        <div class="usecase-terminal">
+          <span class="uc-prompt">$ </span><span class="uc-cmd">curl localhost:7777/run \</span><br>
+          <span class="uc-cmd">&nbsp;&nbsp;-d '{"cmd":"deploy --prod"}'</span><br>
+          <span class="uc-check">&check;</span> <span class="uc-out">{"ok":true,"tab":"deploy"}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES STRIP ============ -->
+<section class="features-strip reveal" id="features">
+  <div class="features-strip-inner">
+    <div class="feature-item">
+      <span class="fi-icon">&#9889;</span>
+      <h4>Global Hotkey</h4>
+      <p>Ctrl+I from anywhere. Configurable.</p>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">&#9783;</span>
+      <h4>Multi-Tab</h4>
+      <p>Multiple sessions. Dynamic titles.</p>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">&#127912;</span>
+      <h4>8 Themes</h4>
+      <p>Dark, Matrix, Dracula, Nord &amp; more.</p>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">&#9881;</span>
+      <h4>Quick Commands</h4>
+      <p>One-click for Claude, Gemini, Codex.</p>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">&#128269;</span>
+      <h4>Terminal Search</h4>
+      <p>Cmd+F searches through output.</p>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">&#128268;</span>
+      <h4>Local API</h4>
+      <p>HTTP on port 7777. Fully controllable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ API SECTION ============ -->
+<section class="api-section reveal" id="api">
+  <div class="container">
+    <span class="section-eyebrow">Local API</span>
+    <div class="section-heading">Your terminal,<br>remote-controlled.</div>
+    <p class="section-sub">TermNotch runs a local server on port 7777. Any app on your Mac can control the terminal.</p>
+
+    <div class="api-layout">
+      <div class="api-text">
+        <h3>Open &amp; close the window</h3>
+        <p>Other tools can show and hide the notch. Perfect for Shortcuts and Raycast.</p>
+
+        <h3>Send commands</h3>
+        <p>Send any command to the active terminal. No copy-paste, no manual input.</p>
+
+        <h3>Notifications</h3>
+        <p>Display inline messages in the notch. Your build is done? The notch lets you know.</p>
+      </div>
+
+      <div class="api-examples">
+        <div class="api-example">
+          <span class="api-label">Open terminal</span>
+          <div class="api-code">
+            <span class="key">curl</span> <span class="url">localhost:7777/toggle</span>
+          </div>
+        </div>
+        <div class="api-example">
+          <span class="api-label">Run command</span>
+          <div class="api-code">
+            <span class="key">curl</span> <span class="url">localhost:7777/run</span> \<br>
+            &nbsp;&nbsp;-d <span class="str">'{"cmd":"git pull"}'</span>
+          </div>
+        </div>
+        <div class="api-example">
+          <span class="api-label">Notification</span>
+          <div class="api-code">
+            <span class="key">curl</span> <span class="url">localhost:7777/notify</span> \<br>
+            &nbsp;&nbsp;-d <span class="str">'{"text":"Build complete &check;"}'</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE DEMO ============ -->
+<section class="demo-section reveal" id="demo">
+  <div class="container">
+    <span class="section-eyebrow">Live Preview</span>
+    <div class="section-heading" style="text-align:center">This is how it feels.</div>
+
+    <div class="demo-wrap">
+      <div class="demo-bar">
+        <div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div>
+        <div class="demo-bar-title">TermNotch &mdash; claude</div>
+      </div>
+      <div class="demo-body" id="demo-terminal"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing reveal" id="pricing">
+  <div class="container">
+    <span class="section-eyebrow">Pricing</span>
+    <div class="section-heading" style="text-align:center">Pay once.<br>Use forever.</div>
+    <p class="section-sub" style="margin:0 auto;text-align:center;max-width:480px">No subscription. No telemetry. No cloud. A native app that does exactly what it promises.</p>
+
+    <div class="price-box">
+      <div class="price-tag">Lifetime License</div>
+      <div class="price-amount">&euro;9<span>.99</span></div>
+      <div class="price-sub">One-time payment &middot; all updates included</div>
+      <ul class="price-list">
+        <li>Full-featured terminal emulator</li>
+        <li>8 themes, configurable hotkey</li>
+        <li>Multi-tab, search, Quick Commands</li>
+        <li>Local API for automation</li>
+        <li>Native Swift, under 4 MB</li>
+        <li>Apple signed &amp; notarized</li>
+      </ul>
+      <button class="price-btn" id="buy-btn" onclick="window.open('#','_blank')">BUY NOW</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="reveal" id="faq">
+  <div class="container">
+    <span class="section-eyebrow">FAQ</span>
+    <div class="section-heading" style="text-align:center">Frequently Asked Questions</div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What exactly is TermNotch?</summary>
+        <div class="faq-answer">A native macOS app that turns the MacBook notch into a full-featured drop-down terminal. Press a hotkey and a terminal slides out of the notch &mdash; perfect for quick commands and AI CLI tools.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Which AI tools are supported?</summary>
+        <div class="faq-answer">All of them. TermNotch is a full terminal emulator. Claude Code, Gemini CLI, Codex CLI, GitHub Copilot CLI &mdash; anything that runs in the command line runs in TermNotch.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need a MacBook with a notch?</summary>
+        <div class="faq-answer">TermNotch is optimized for MacBooks with a notch (MacBook Pro 2021 and later). On Macs without a notch, the terminal appears centered at the top of the screen.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Is this a subscription?</summary>
+        <div class="faq-answer">No. &euro;9.99 once. All updates included. No hidden costs, no renewal.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Is the app safe?</summary>
+        <div class="faq-answer">Yes. Signed and notarized by Apple. No telemetry, no data collection, no internet connection required. Everything runs locally.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I change the hotkey?</summary>
+        <div class="faq-answer">Yes. Modifier (Ctrl, Opt, Cmd) and key (I, T, N, J, Space, `) are freely combinable. Default: Ctrl+I.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What is the Local API?</summary>
+        <div class="faq-answer">A local HTTP server on port 7777. External tools can use it to control the terminal: open the window, send commands, create tabs, display notifications.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta reveal">
+  <div class="final-prompt"><span style="color:var(--text-muted)">~</span> <span>termnotch --install</span><span class="cursor"></span></div>
+  <h2>The notch was never useless.<br>You just didn't have a<br>terminal in it yet.</h2>
+  <p>Built with obsessive attention to detail. For developers who care about their workflow.</p>
+  <a href="#pricing" class="btn-main">Buy TermNotch &mdash; &euro;9.99</a>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-links">
+    <button class="flink" id="openImpressum">Legal Notice</button>
+    <button class="flink" id="openDatenschutz">Privacy Policy</button>
+    <a href="index.html">Deutsch</a>
+    <a class="footer-yt" href="https://youtube.com/@rmkipraxis?si=h2qNroeG7EqviRwE" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff4d4d" d="M23.5 6.2a3.04 3.04 0 0 0-2.14-2.16C19.47 3.5 12 3.5 12 3.5s-7.47 0-9.36.54A3.04 3.04 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3.04 3.04 0 0 0 2.14 2.16c1.89.54 9.36.54 9.36.54s7.47 0 9.36-.54a3.04 3.04 0 0 0 2.14-2.16A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8Z"/><path fill="#fff" d="m9.75 15.5 6.25-3.5-6.25-3.5v7Z"/></svg>
+      YouTube
+    </a>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">&uarr;</button>
+
+<div class="cookie-notice" id="cookieNotice" role="region" aria-label="Privacy notice">
+  <p>This website does not use cookies. No personal data is collected.</p>
+  <button type="button" class="cookie-ack" id="cookieAck">OK</button>
+</div>
+
+<div class="legal-modal" id="impressumModal" aria-hidden="true">
+  <div class="legal-dialog" role="dialog" aria-modal="true" aria-labelledby="impressumTitle">
+    <div class="legal-head"><h3 id="impressumTitle">Legal Notice</h3><button class="legal-close" id="closeImpressum" aria-label="Close">&times;</button></div>
+    <iframe class="legal-frame" id="impressumFrame" title="Legal Notice"></iframe>
+  </div>
+</div>
+<div class="legal-modal" id="datenschutzModal" aria-hidden="true">
+  <div class="legal-dialog" role="dialog" aria-modal="true" aria-labelledby="datenschutzTitle">
+    <div class="legal-head"><h3 id="datenschutzTitle">Privacy Policy</h3><button class="legal-close" id="closeDatenschutz" aria-label="Close">&times;</button></div>
+    <iframe class="legal-frame" id="datenschutzFrame" title="Privacy Policy"></iframe>
+  </div>
+</div>
+
+<script>
+const obs=new IntersectionObserver(entries=>{
+entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const demoLines=[
+{prompt:'~ > ',cmd:'claude',delay:800},
+{output:'\u2728 Claude Code v1.2.0',delay:400},
+{output:'',delay:100},
+{prompt:'claude > ',cmd:'fix the login bug in auth.ts',delay:1200},
+{output:'',delay:300},
+{output:'\u2713 Reading auth.ts...',delay:500},
+{output:'\u2713 Found issue: token expiry not checked',delay:600},
+{output:'\u2713 Fix applied to 3 files',delay:500},
+{output:'',delay:200},
+{output:'All tests passing. Ready to commit.',delay:400},
+{output:'',delay:300},
+{prompt:'claude > ',cmd:'commit and push',delay:1000},
+{output:'\u2713 Committed: fix(auth): add token expiry check',delay:500},
+{output:'\u2713 Pushed to origin/main',delay:400},
+{output:'',delay:200},
+{output:'Done. Anything else?',delay:300},
+];
+
+(function runDemo(){
+const el=document.getElementById('demo-terminal');
+if(!el)return;
+function typeAll(cb){
+el.innerHTML='';
+let html='',delay=500;
+const scroll=()=>{el.scrollTop=el.scrollHeight;};
+demoLines.forEach(line=>{
+const d=delay;
+if(line.cmd){
+delay+=line.delay||400;
+const cmdDelay=line.cmd.length*45;
+setTimeout(()=>{
+html+='<span class="term-prompt">'+line.prompt+'</span>';
+let j=0;const iv=setInterval(()=>{
+j++;const partial=line.cmd.substring(0,j);
+el.innerHTML=html+'<span class="term-cmd">'+partial+'</span><span class="cursor" style="height:14px;width:7px"></span>';scroll();
+if(j>=line.cmd.length){clearInterval(iv);html+='<span class="term-cmd">'+line.cmd+'</span><br>';el.innerHTML=html;scroll();}
+},45);
+},d);
+delay+=cmdDelay;
+}else{
+delay+=line.delay||200;
+setTimeout(()=>{
+const color=line.output.startsWith('\u2713')?'var(--green)':'var(--text-dim)';
+html+='<span style="color:'+color+'">'+line.output+'</span><br>';
+el.innerHTML=html;scroll();
+},d);
+}
+});
+setTimeout(cb,delay+3000);
+}
+function cycle(){typeAll(()=>setTimeout(cycle,2000))}
+const demoObs=new IntersectionObserver(entries=>{
+if(entries[0].isIntersecting){demoObs.disconnect();cycle();}
+},{threshold:0.3});
+demoObs.observe(el);
+})();
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+a.addEventListener('click',e=>{
+e.preventDefault();
+const t=document.querySelector(a.getAttribute('href'));
+if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+});
+});
+
+(function(){
+const cn=document.getElementById('cookieNotice'),ca=document.getElementById('cookieAck');
+if(!cn||!ca)return;
+if(localStorage.getItem('termnotch-cookie')==='1')cn.classList.add('is-hidden');
+ca.addEventListener('click',()=>{localStorage.setItem('termnotch-cookie','1');cn.classList.add('is-hidden');});
+})();
+
+function bindModal(mid,oid,cid,fid,doc){
+const m=document.getElementById(mid),o=document.getElementById(oid),c=document.getElementById(cid),f=document.getElementById(fid);
+if(!m||!o||!c||!f)return;
+f.srcdoc=doc;
+o.addEventListener('click',()=>{m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});
+c.addEventListener('click',()=>{m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';});
+m.addEventListener('click',e=>{if(e.target===m)c.click();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&m.classList.contains('open'))c.click();});
+}
+
+(function(){
+const btn=document.getElementById('toTop');
+if(!btn)return;
+window.addEventListener('scroll',()=>{btn.classList.toggle('visible',window.scrollY>600);},{passive:true});
+btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+
+bindModal('impressumModal','openImpressum','closeImpressum','impressumFrame',
+'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Legal Notice (Impressum)</h1><h2>Information according to &sect; 5 TMG</h2><p><strong>Robert Meyer</strong><br>Robert Meyer c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Germany</p><h2>Contact</h2><p>Email: rm@kostenmanager.net<br>Contact form: <a href="https://mein.online-impressum.de/robert-meyer/" target="_blank" rel="noopener noreferrer">https://mein.online-impressum.de/robert-meyer/</a></p><h2>Responsible for content according to &sect; 55 Abs. 2 RStV</h2><p><strong>Robert Meyer</strong><br>Robert Meyer c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin</p><h2>EU Online Dispute Resolution</h2><p><a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a></p><h2>Consumer Dispute Resolution</h2><p>We are not willing or obligated to participate in dispute resolution proceedings before a consumer arbitration board.</p></body></html>');
+
+bindModal('datenschutzModal','openDatenschutz','closeDatenschutz','datenschutzFrame',
+'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Privacy Policy</h1><h2>1. Privacy at a Glance</h2><p>The following information provides a simple overview of what happens to your personal data when you visit this website.</p><h2>2. Data Collection on This Website</h2><p>This website does not use cookies. No user accounts are maintained and no marketing cookies are set.</p><h2>3. External Services</h2><p>Google Fonts are loaded for the display of this website. The privacy policies of the respective providers apply additionally for these external services.</p><h2>4. Responsible Party</h2><p>Robert Meyer<br>c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Germany</p></body></html>');
+</script>
+</body>
+</html>
