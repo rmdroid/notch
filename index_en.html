@@ -257,6 +257,26 @@ transition:all 0.3s var(--ease);backdrop-filter:blur(16px)}
 .to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
 .to-top:hover{background:var(--green);color:#000;border-color:var(--green)}
 
+.updates-dialog{width:min(100%,520px);border-radius:16px;background:var(--surface2);color:var(--text);box-shadow:0 40px 100px rgba(0,0,0,0.6);overflow:hidden;border:1px solid var(--border)}
+.updates-body{padding:28px 28px 32px;display:grid;gap:20px}
+.updates-body h4{font-size:18px;font-weight:700;letter-spacing:-0.3px;margin:0}
+.updates-body>p{font-size:13px;color:var(--text-dim);line-height:1.7;font-weight:300;margin:0}
+.updates-form{display:grid;gap:14px}
+.updates-row{display:grid;gap:6px}
+.updates-row label{font-size:12px;color:var(--text-dim)}
+.updates-row input{width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.04);
+color:var(--text);font-family:var(--sans);font-size:13px;transition:border-color 0.2s;outline:none}
+.updates-row input:focus{border-color:rgba(51,255,102,0.3)}
+.updates-row input::placeholder{color:var(--text-muted)}
+.updates-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px}
+.updates-btn{padding:12px 28px;border-radius:8px;border:none;background:var(--green);color:#000;font-family:var(--sans);font-size:13px;font-weight:700;
+cursor:pointer;transition:all 0.2s}
+.updates-btn:hover{box-shadow:0 8px 32px rgba(51,255,102,0.25);transform:translateY(-1px)}
+.updates-btn:disabled{opacity:0.5;cursor:wait;transform:none;box-shadow:none}
+.updates-status{font-size:12px;color:var(--text-dim);min-height:1.2em}
+.updates-status.is-error{color:#ff5f57}
+.updates-status.is-success{color:var(--green)}
+
 @media(max-width:900px){
 .usecase-grid{grid-template-columns:1fr}
 .api-layout{grid-template-columns:1fr;gap:48px}
@@ -538,6 +558,7 @@ section{padding:100px 20px}
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="footer-links">
+    <button class="flink" id="openUpdates">Updates / Newsletter</button>
     <button class="flink" id="openImpressum">Legal Notice</button>
     <button class="flink" id="openDatenschutz">Privacy Policy</button>
     <a href="index.html">Deutsch</a>
@@ -553,6 +574,30 @@ section{padding:100px 20px}
 <div class="cookie-notice" id="cookieNotice" role="region" aria-label="Privacy notice">
   <p>This website does not use cookies. No personal data is collected.</p>
   <button type="button" class="cookie-ack" id="cookieAck">OK</button>
+</div>
+
+<div class="legal-modal" id="updatesModal" aria-hidden="true">
+  <div class="updates-dialog" role="dialog" aria-modal="true" aria-labelledby="updatesTitle">
+    <div class="legal-head"><h3 id="updatesTitle">Updates / Newsletter</h3><button class="legal-close" id="closeUpdates" aria-label="Close">&times;</button></div>
+    <div class="updates-body">
+      <h4>Product updates straight to your inbox.</h4>
+      <p>New versions, features and the App Store launch &mdash; we'll let you know by email. No spam, only product-related updates.</p>
+      <form class="updates-form" id="updatesForm" novalidate>
+        <div class="updates-row">
+          <label for="updatesName">Name (optional)</label>
+          <input id="updatesName" name="name" type="text" autocomplete="name" placeholder="Your name">
+        </div>
+        <div class="updates-row">
+          <label for="updatesEmail">Email</label>
+          <input id="updatesEmail" name="email" type="email" autocomplete="email" required placeholder="name@example.com">
+        </div>
+        <div class="updates-actions">
+          <button class="updates-btn" id="updatesSubmit" type="submit">Get updates</button>
+          <div class="updates-status" id="updatesStatus" aria-live="polite"></div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="legal-modal" id="impressumModal" aria-hidden="true">
@@ -664,11 +709,49 @@ window.addEventListener('scroll',()=>{btn.classList.toggle('visible',window.scro
 btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 })();
 
+// Updates modal
+(function(){
+const modal=document.getElementById('updatesModal');
+const openBtn=document.getElementById('openUpdates');
+const closeBtn=document.getElementById('closeUpdates');
+const form=document.getElementById('updatesForm');
+const nameInput=document.getElementById('updatesName');
+const emailInput=document.getElementById('updatesEmail');
+const submitBtn=document.getElementById('updatesSubmit');
+const status=document.getElementById('updatesStatus');
+if(!modal||!openBtn||!closeBtn)return;
+function openM(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+if(status){status.textContent='';status.className='updates-status';}}
+function closeM(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';if(form)form.reset();}
+openBtn.addEventListener('click',openM);
+closeBtn.addEventListener('click',closeM);
+modal.addEventListener('click',e=>{if(e.target===modal)closeM();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeM();});
+if(form&&emailInput&&submitBtn&&status){
+form.addEventListener('submit',async e=>{
+e.preventDefault();
+const name=nameInput?nameInput.value.trim():'';
+const email=emailInput.value.trim();
+if(!email||!emailInput.checkValidity()){status.textContent='Please enter a valid email address.';status.className='updates-status is-error';emailInput.focus();return;}
+submitBtn.disabled=true;status.textContent='Submitting...';status.className='updates-status';
+try{
+const effectiveName=name||email;
+await fetch('https://n8n.top-beraternetzwerk.de/webhook/termine',{method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({name:effectiveName,email:email,
+message:'TermNotch Updates / Newsletter\nName: '+effectiveName+'\nEmail: '+email+'\nPage: '+window.location.href,
+source:'termnotch-landingpage-updates',page:window.location.href,interest:'TermNotch Updates / Newsletter'})});
+form.reset();status.textContent='Thank you! You will receive updates by email.';status.className='updates-status is-success';
+}catch(_){status.textContent='Something went wrong. Please try again later.';status.className='updates-status is-error';}
+finally{submitBtn.disabled=false;}
+});
+}
+})();
+
 bindModal('impressumModal','openImpressum','closeImpressum','impressumFrame',
 '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Legal Notice (Impressum)</h1><h2>Information according to &sect; 5 TMG</h2><p><strong>Robert Meyer</strong><br>Robert Meyer c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Germany</p><h2>Contact</h2><p>Email: rm@kostenmanager.net<br>Contact form: <a href="https://mein.online-impressum.de/robert-meyer/" target="_blank" rel="noopener noreferrer">https://mein.online-impressum.de/robert-meyer/</a></p><h2>Responsible for content according to &sect; 55 Abs. 2 RStV</h2><p><strong>Robert Meyer</strong><br>Robert Meyer c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin</p><h2>EU Online Dispute Resolution</h2><p><a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a></p><h2>Consumer Dispute Resolution</h2><p>We are not willing or obligated to participate in dispute resolution proceedings before a consumer arbitration board.</p></body></html>');
 
 bindModal('datenschutzModal','openDatenschutz','closeDatenschutz','datenschutzFrame',
-'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Privacy Policy</h1><h2>1. Privacy at a Glance</h2><p>The following information provides a simple overview of what happens to your personal data when you visit this website.</p><h2>2. Data Collection on This Website</h2><p>This website does not use cookies. No user accounts are maintained and no marketing cookies are set.</p><h2>3. External Services</h2><p>Google Fonts are loaded for the display of this website. The privacy policies of the respective providers apply additionally for these external services.</p><h2>4. Responsible Party</h2><p>Robert Meyer<br>c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Germany</p></body></html>');
+'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Privacy Policy</h1><h2>1. Privacy at a Glance</h2><p><strong>General Information</strong></p><p>The following information provides a simple overview of what happens to your personal data when you visit this website. This website was developed in compliance with the General Data Protection Regulation (GDPR).</p><h2>2. Data Collection on This Website</h2><p>This website does not use cookies. No user accounts are maintained and no marketing cookies are set. If you use the &ldquo;Updates / Newsletter&rdquo; form, the data you enter will be transmitted to Robert Meyer via an external webhook service for processing your request.</p><h2>3. External Services</h2><p>Google Fonts are loaded for the display of this website. Umami is used for anonymous traffic analytics. When you submit the update form, the entered data is transmitted to an external webhook endpoint. The privacy policies of the respective providers apply additionally for these external services.</p><h2>4. Responsible Party</h2><p>Robert Meyer<br>c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Germany</p></body></html>');
 </script>
 </body>
 </html>
