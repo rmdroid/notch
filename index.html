@@ -200,8 +200,11 @@ background:linear-gradient(90deg,transparent,rgba(51,255,102,0.3),transparent)}
 .price-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
 background:linear-gradient(90deg,transparent 10%,var(--green) 50%,transparent 90%)}
 .price-tag{font-size:11px;color:var(--green);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:var(--mono)}
-.price-amount{font-size:64px;font-weight:800;letter-spacing:-3px;margin:16px 0 4px}
-.price-amount span{font-size:24px;color:var(--text-dim);font-weight:300}
+.price-amount{font-size:64px;font-weight:800;letter-spacing:-3px;margin:16px 0 4px;display:flex;align-items:center;justify-content:center;gap:12px}
+.price-amount span{font-size:24px;color:inherit;font-weight:300}
+.price-note{position:relative;display:inline-flex;align-items:flex-start;color:var(--text-muted);font-size:14px;cursor:help;flex:0 0 auto;font-weight:300;letter-spacing:0;margin-left:4px;line-height:1}
+.price-note::after{content:attr(data-note);position:absolute;left:50%;bottom:calc(100% + 10px);width:min(260px,72vw);padding:10px 12px;border-radius:12px;background:rgba(6,16,28,0.95);border:1px solid rgba(255,255,255,0.08);color:#f3f7ff;font-size:12px;line-height:1.5;text-align:left;transform:translate(-50%,6px);opacity:0;pointer-events:none;transition:opacity 180ms ease,transform 180ms ease;font-weight:300;letter-spacing:0}
+.price-note:hover::after,.price-note:focus-visible::after{opacity:1;transform:translate(-50%,0)}
 .price-sub{font-size:13px;color:var(--text-dim);margin-bottom:36px;font-weight:300}
 .price-list{list-style:none;text-align:left;margin-bottom:40px}
 .price-list li{padding:12px 0;font-size:13px;color:var(--text);border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:12px;font-weight:300}
@@ -511,7 +514,7 @@ section{padding:100px 20px}
 
     <div class="price-box">
       <div class="price-tag">Lifetime Lizenz</div>
-      <div class="price-amount">&euro;9<span>,99</span></div>
+      <div class="price-amount">&euro;9<span>,99</span><span class="price-note" tabindex="0" data-note="Der Kauf l&auml;uft sicher &uuml;ber Lemon Squeezy. Je nach Steuerland, Zahlungsart und W&auml;hrungsumrechnung kann die endg&uuml;ltige Belastung leicht abweichen.">*</span></div>
       <div class="price-sub">Einmalzahlung &middot; alle Updates inklusive</div>
       <ul class="price-list">
         <li>Vollwertiger Terminal-Emulator</li>
@@ -521,7 +524,7 @@ section{padding:100px 20px}
         <li>Natives Swift, unter 4 MB</li>
         <li>Apple signiert &amp; notarisiert</li>
       </ul>
-      <button class="price-btn" id="buy-btn" onclick="window.open('#','_blank')">JETZT KAUFEN</button>
+      <a href="https://ki-fachbuecher.lemonsqueezy.com/checkout/buy/ca13a6f4-c987-4763-975e-35aa92fb6d29?embed=1" class="lemonsqueezy-button price-btn" style="display:block;text-align:center;text-decoration:none">JETZT KAUFEN</a>
     </div>
   </div>
 </section>
@@ -777,5 +780,6 @@ bindModal('impressumModal','openImpressum','closeImpressum','impressumFrame',
 bindModal('datenschutzModal','openDatenschutz','closeDatenschutz','datenschutzFrame',
 '<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:1.1rem 1rem 1.4rem;font-family:system-ui,sans-serif;color:rgba(255,255,255,0.8);line-height:1.55;background:#0a0a0a}h1{margin:0 0 .75rem;font-size:1.4rem;line-height:1.2;color:#33FF66}h2{margin:1rem 0 .35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.4)}p{margin:.3rem 0;font-size:.94rem}a{color:#33FF66;text-decoration:underline}</style></head><body><h1>Datenschutzerkl&auml;rung</h1><h2>1. Datenschutz auf einen Blick</h2><p><strong>Allgemeine Hinweise</strong></p><p>Die folgenden Hinweise geben einen einfachen &Uuml;berblick dar&uuml;ber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Diese Website wurde unter Beachtung der Datenschutz-Grundverordnung (DSGVO) entwickelt.</p><h2>2. Datenerfassung auf dieser Website</h2><p>Diese Website verwendet keine Cookies. Es werden keine Nutzerkonten gef&uuml;hrt und keine Marketing-Cookies gesetzt. Wenn Sie das Formular &bdquo;Updates / Newsletter&ldquo; nutzen, werden die von Ihnen eingegebenen Daten &uuml;ber einen externen Webhook-Dienst an Robert Meyer zur Bearbeitung des Anliegens &uuml;bermittelt.</p><h2>3. Externe Dienste</h2><p>F&uuml;r die Darstellung der Website werden Google Fonts geladen. Zur anonymisierten Reichweitenmessung wird Umami eingesetzt. Wenn Sie das Update-Formular absenden, werden die eingegebenen Daten an einen externen Webhook-Endpunkt &uuml;bermittelt. F&uuml;r diese externen Dienste gelten erg&auml;nzend die Datenschutzbestimmungen der jeweiligen Anbieter.</p><h2>4. Verantwortliche Stelle</h2><p>Robert Meyer<br>c/o Online-Impressum.de #4759<br>Europaring 90<br>53757 Sankt Augustin<br>Deutschland</p></body></html>');
 </script>
+<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
 </body>
 </html>
