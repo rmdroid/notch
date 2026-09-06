@@ -1,0 +1,33 @@
+# TermNotch
+
+> TermNotch is a native Swift terminal for macOS that opens at the MacBook notch with a global keyboard shortcut. It provides a convenient place to run Claude Code, Codex CLI and other installed command-line tools, with a local HTTP API for automation.
+
+TermNotch is made by Robert Meyer. The official website is https://ki-notch.de/ and is available in German and English.
+
+Product facts:
+- Requires macOS 15 or later. On Macs without a notch, the terminal appears at the top center of the screen.
+- Default shortcut: Ctrl + I. The shortcut is configurable.
+- Features: multiple terminal tabs, Quick Commands, eight themes and terminal search with Cmd + F.
+- Native Swift app, under 4 MB, Apple signed and notarized.
+- Local HTTP API on port 7777. POST /toggle shows or hides the terminal. POST /run accepts a JSON body with a command field and runs it in a new tab. POST /notify accepts a JSON body with a message field.
+- One-time license advertised at EUR 9.99, including updates. The final checkout charge may vary by tax location, payment method and currency conversion. Checkout is handled by Lemon Squeezy.
+- TermNotch supplies the terminal, not the AI models or AI subscriptions. Claude Code, Codex CLI and other tools must be installed and configured separately. Their accounts and fees are not included.
+- TermNotch runs locally and uses no telemetry. AI tools launched inside it may connect to external services.
+
+## Product pages
+
+- [TermNotch auf Deutsch](https://ki-notch.de/): German product overview, features, video, price and FAQ.
+- [TermNotch in English](https://ki-notch.de/index_en.html): English product overview, features, video, price and FAQ.
+
+## Features and usage
+
+- [How it works](https://ki-notch.de/index_en.html#workflow): Open the terminal, use a tool, hide it and return to work.
+- [Terminal features](https://ki-notch.de/index_en.html#features): Shortcuts, tabs, Quick Commands, themes, search and native Swift implementation.
+- [Local API examples](https://ki-notch.de/index_en.html#api): Copyable HTTP examples for toggling the terminal, running commands and displaying notifications.
+- [Pricing](https://ki-notch.de/index_en.html#pricing): License scope, current advertised price, checkout and payment notes.
+- [Frequently asked questions](https://ki-notch.de/index_en.html#faq): Requirements, separate AI tool setup, notch support and local operation.
+
+## Optional
+
+- [Contact Robert Meyer](https://mein.online-impressum.de/robert-meyer/): Existing public contact form.
+- [YouTube](https://youtube.com/@rmkipraxis?si=h2qNroeG7EqviRwE): Robert Meyer's linked YouTube channel.
